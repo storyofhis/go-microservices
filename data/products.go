@@ -1,6 +1,8 @@
 package data
 
 import (
+	"encoding/json"
+	"io"
 	"time"
 )
 
@@ -17,13 +19,19 @@ type Product struct {
 }
 
 // Products is a collection of Product
-// type Products[] *Product
+type Products[] *Product
 
-func GetProducts() []*Product {
+func (p *Products) ToJSON(w io.Writer) error {
+	e := json.NewEncoder(w)
+	return e.Encode(p)
+}
+
+func GetProducts() Products {
 	return productList
 }
+
 var productList = []*Product{
-	&Product{
+	{
 		ID: 1,
 		Name: "Latte",
 		Description: "Frothy milky coffee",
@@ -32,7 +40,7 @@ var productList = []*Product{
 		CreatedOn: time.Now().UTC().String(),
 		UpdatedOn: time.Now().UTC().String(),
 	},
-	&Product{
+	{
 		ID: 2,
 		Name: "Espresso",
 		Description: "short and strong coffee without milk",
